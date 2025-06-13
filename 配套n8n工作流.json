@@ -1,0 +1,352 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cubox",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -700,
+        240
+      ],
+      "id": "fda61c62-d669-48fb-a42c-c9ff19703a57",
+      "name": "Webhook",
+      "webhookId": "e0c209cb-0bc8-4ace-be6b-3ee50c3de22b"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=分析一下这段内容{{ $json.body.content }} 属于什么类型的内容，判断逻辑如下：如果是工具类则输出“工具库”字样；如果是AI知识类内容则输出“AI学习资料”字样；如果是github项目类内容则输出“github精选项目”字样；如果是编程知识类内容则输出“编程学习资料”字样；如果是创业项目类内容则输出“项目学习资料”字样；如果不属于上述所有内容则什么都不输出\n注意！！！！，要的只是冒号里面的内容，除了工具库、AI学习资料、github精选项目、编程学习资料、项目学习资料或者是什么都不输出之外，其他无关内容一概不输出",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        120,
+        380
+      ],
+      "id": "dbafcbcb-2b48-426c-b0e0-1cd8bd7c95d7",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-flash-preview-05-20",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        220,
+        600
+      ],
+      "id": "b677e8a7-3ebc-453c-a046-ceadb30baadc",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "lf7eKoZzphffOMqj",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4cee3c5f-8336-4bfb-8ffa-ea0e0d1ae982",
+              "leftValue": "={{ $json.body.content }}",
+              "rightValue": "^https?:\\/\\/",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -440,
+        100
+      ],
+      "id": "378b9764-8a3a-485d-815b-34f9d470791e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cubox.pro/c/api/save/你的url",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $('Webhook').item.json.body.content }}"
+            },
+            {
+              "name": "type",
+              "value": "url"
+            },
+            {
+              "name": "folder",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        980,
+        0
+      ],
+      "id": "1d807b73-e655-4278-ad8a-80ab4b91808a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.body.content }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f18a1fed-c580-46ea-a2ae-07889d979438",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 拿到全部输入 items（一般只有一个）\nconst items = $input.all();\n// 取第一条的 HTML，字段名根据你 HTTP Request 输出改成 data/body/response\nconst html = items[0].json.data;  \n\n// 去掉 <script>、<style>、所有标签，并合并空白\nconst text = html\n  .replace(/<script[\\s\\S]*?>[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?>[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<\\/?[^>]+(>|$)/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\n// 返回一个字段：content\nreturn [\n  { json: { content: text } }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "452db3f6-8579-4dcd-92cc-526e2a2a58e2",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=分析一下这段内容 {{ $json.content }} 属于什么类型的内容，判断逻辑如下：如果是工具类则输出“工具库”字样；如果是AI知识类内容则输出“AI学习资料”字样；如果是github项目类内容则输出“github精选项目”字样；如果不属于上述所有内容则输出空值",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        440,
+        0
+      ],
+      "id": "8843fa59-e838-4ec2-8a3e-3ece4266c77f",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-flash-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        540,
+        220
+      ],
+      "id": "0d6eafa6-59b0-499f-ae5e-ed20feae5821",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "lf7eKoZzphffOMqj",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cubox.pro/c/api/save/你的url",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "={{ $('Webhook').item.json.body.content }}"
+            },
+            {
+              "name": "type",
+              "value": "memo"
+            },
+            {
+              "name": "folder",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        380
+      ],
+      "id": "56883d52-de8d-46e2-900f-04bafd476f3f",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// —— 清理控制字符 ——\n// 1. 拿到所有输入 items（通常只有一条）\nconst items = $input.all();\n\n// 2. 对每一条都做同样的「清理」\n//    - 把 \\r、\\n、\\t 这些控制字符全部替成空格\n//    - 再把多个空格合并成一个\nconst cleaned = items.map(item => {\n  // 取原始 content 字段\n  let text = item.json.content ?? '';\n\n  // 先把所有回车换行制表符换成空格\n  text = text.replace(/[\\r\\n\\t]+/g, ' ');\n  // 再把多个空格折叠成一个，并去两端空白\n  text = text.replace(/\\s+/g, ' ').trim();\n\n  // 把清理后的值覆盖回去\n  return {\n    json: {\n      ...item.json,\n      content: text,\n    }\n  };\n});\n\n// 3. 返回清理完的 items\nreturn cleaned;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -220,
+        200
+      ],
+      "id": "422d2dd9-f81e-4914-b6c3-f11cc27962b3",
+      "name": "Code1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "",
+  "meta": {
+    "instanceId": "4f6c07e64fa6316324b0d7ab5367ee969bff4a3cb920d01e9232ec6926202e00"
+  },
+  "tags": []
+}
