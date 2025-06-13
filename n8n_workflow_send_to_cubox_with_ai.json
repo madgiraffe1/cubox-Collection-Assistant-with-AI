@@ -1,5 +1,5 @@
 {
-  "name": "My workflow 2",
+  "name": "My workflow 3",
   "nodes": [
     {
       "parameters": {
@@ -10,26 +10,26 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -700,
-        240
+        -440,
+        140
       ],
-      "id": "fda61c62-d669-48fb-a42c-c9ff19703a57",
+      "id": "c5d7b68c-e41c-4fcf-9e68-559f75edb0e1",
       "name": "Webhook",
       "webhookId": "e0c209cb-0bc8-4ace-be6b-3ee50c3de22b"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=分析一下这段内容{{ $json.body.content }} 属于什么类型的内容，判断逻辑如下：如果是工具类则输出“工具库”字样；如果是AI知识类内容则输出“AI学习资料”字样；如果是github项目类内容则输出“github精选项目”字样；如果是编程知识类内容则输出“编程学习资料”字样；如果是创业项目类内容则输出“项目学习资料”字样；如果不属于上述所有内容则什么都不输出\n注意！！！！，要的只是冒号里面的内容，除了工具库、AI学习资料、github精选项目、编程学习资料、项目学习资料或者是什么都不输出之外，其他无关内容一概不输出",
+        "text": "=分析一下这段内容{{ $json.body.content }} 属于什么类型的内容，判断逻辑如下：如果是工具类则输出“工具库”字样；如果是AI知识类内容则输出“AI学习资料”字样；如果是github项目类内容则输出“github精选项目”字样；如果是编程知识类内容则输出“编程学习资料”字样；如果是创业项目类内容则输出“项目学习资料”字样；如果不属于上述所有内容则输出“待判断”字样！！！！，要的只是冒号里面的内容，除了工具库、AI学习资料、github精选项目、编程学习资料、项目学习资料或者是待判断之外，其他无关内容一概不输出，不要给我输出",
         "batching": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        120,
-        380
+        380,
+        280
       ],
-      "id": "dbafcbcb-2b48-426c-b0e0-1cd8bd7c95d7",
+      "id": "8994e622-7d35-4061-9e71-b469956c2b92",
       "name": "Basic LLM Chain"
     },
     {
@@ -40,10 +40,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        220,
-        600
+        480,
+        500
       ],
-      "id": "b677e8a7-3ebc-453c-a046-ceadb30baadc",
+      "id": "6dc688b3-dcb0-4bca-8d14-0c73da6fd58d",
       "name": "OpenRouter Chat Model",
       "credentials": {
         "openRouterApi": {
@@ -79,10 +79,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -440,
-        100
+        -180,
+        0
       ],
-      "id": "378b9764-8a3a-485d-815b-34f9d470791e",
+      "id": "f7736288-c7ef-40a5-9143-b1be64102035",
       "name": "If"
     },
     {
@@ -111,10 +111,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        980,
-        0
+        1240,
+        -100
       ],
-      "id": "1d807b73-e655-4278-ad8a-80ab4b91808a",
+      "id": "5f569314-4547-4036-96f5-a492e33392c5",
       "name": "HTTP Request"
     },
     {
@@ -131,10 +131,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        0,
-        0
+        260,
+        -100
       ],
-      "id": "f18a1fed-c580-46ea-a2ae-07889d979438",
+      "id": "7657407d-5430-44f9-bee2-bb662a5010b2",
       "name": "HTTP Request1"
     },
     {
@@ -144,25 +144,25 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        220,
-        0
+        480,
+        -100
       ],
-      "id": "452db3f6-8579-4dcd-92cc-526e2a2a58e2",
+      "id": "f672c7dc-8c87-4ec9-8f77-c7126f0f7227",
       "name": "Code"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=分析一下这段内容 {{ $json.content }} 属于什么类型的内容，判断逻辑如下：如果是工具类则输出“工具库”字样；如果是AI知识类内容则输出“AI学习资料”字样；如果是github项目类内容则输出“github精选项目”字样；如果不属于上述所有内容则输出空值",
+        "text": "=分析一下这段内容{{ $json.content }}  属于什么类型的内容，判断逻辑如下：如果是工具类则输出“工具库”字样；如果是AI知识类内容则输出“AI学习资料”字样；如果是github项目类内容则输出“github精选项目”字样；如果是编程知识类内容则输出“编程学习资料”字样；如果是创业项目类内容则输出“项目学习资料”字样；如果不属于上述所有内容则输出“待判断”字样！！！！，要的只是冒号里面的内容，除了工具库、AI学习资料、github精选项目、编程学习资料、项目学习资料或者是待判断之外，其他无关内容一概不输出，不要给我输出\n",
         "batching": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        440,
-        0
+        700,
+        -100
       ],
-      "id": "8843fa59-e838-4ec2-8a3e-3ece4266c77f",
+      "id": "c5a835cb-4a8f-40d8-8f93-77445d8fb0a6",
       "name": "Basic LLM Chain1"
     },
     {
@@ -173,10 +173,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        540,
-        220
+        800,
+        120
       ],
-      "id": "0d6eafa6-59b0-499f-ae5e-ed20feae5821",
+      "id": "0c83cae4-b864-4379-8161-c4527026a9f3",
       "name": "OpenRouter Chat Model1",
       "credentials": {
         "openRouterApi": {
@@ -211,10 +211,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        520,
-        380
+        780,
+        280
       ],
-      "id": "56883d52-de8d-46e2-900f-04bafd476f3f",
+      "id": "1fb4b2a3-b7de-49c8-b270-49f2ba50a1a5",
       "name": "HTTP Request2"
     },
     {
@@ -224,10 +224,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -220,
-        200
+        40,
+        100
       ],
-      "id": "422d2dd9-f81e-4914-b6c3-f11cc27962b3",
+      "id": "e563f533-eff0-45a9-a459-d6cd72e41b96",
       "name": "Code1"
     }
   ],
@@ -344,9 +344,10 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "",
+  "versionId": "1efed444-41bf-45bd-beb9-d55f7cd83e8c",
   "meta": {
     "instanceId": "4f6c07e64fa6316324b0d7ab5367ee969bff4a3cb920d01e9232ec6926202e00"
   },
+  "id": "DoLuXScaFfKhmRyi",
   "tags": []
 }
