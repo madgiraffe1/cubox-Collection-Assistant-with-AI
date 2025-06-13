@@ -1,0 +1,5 @@
+# Ignore user-specific configuration
+config.sh
+
+# Ignore macOS files
+.DS_Store 

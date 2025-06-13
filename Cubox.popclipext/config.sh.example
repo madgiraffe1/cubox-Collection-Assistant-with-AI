@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# 1. Get your Cubox API URL from here: https://cubox.pro/my/settings/extensions
+# 2. Paste it below, replacing the placeholder URL.
+# 3. Save this file as "config.sh" in the same directory.
+
+API_URL="PASTE_YOUR_CUBOX_API_URL_HERE" 

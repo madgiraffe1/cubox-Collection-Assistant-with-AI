@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Extension Name</key>
+    <string>Save to Cubox</string>
+    <key>Extension Identifier</key>
+    <string>com.gemini.popclip.extension.cubox</string>
+    <key>Extension Description</key>
+    <string>Save selected text or URL to Cubox. The API key is hardcoded in the save.sh script.</string>
+    <key>Actions</key>
+    <array>
+        <dict>
+            <key>Title</key>
+            <string>Cubox</string>
+            <key>Script Interpreter</key>
+            <string>/bin/bash</string>
+            <key>Shell Script File</key>
+            <string>save.sh</string>
+            <key>Image File</key>
+            <string>cubox.png</string>
+            <key>Tooltip</key>
+            <string>Save to Cubox</string>
+        </dict>
+    </array>
+</dict>
+</plist> 
